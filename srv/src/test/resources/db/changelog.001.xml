@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+	<changeSet author="Haifeng Yao" id="1.0.0.0001">
+		<preConditions onFail="CONTINUE">
+			<not>
+				<tableExists tableName="sequence_num" />
+			</not>
+		</preConditions>
+
+		<createTable tableName="analysis_header">
+			<column name="id" type="INT8">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(60)" />	
+			<column name="status" type="varchar(1)" />
+			<column name="target_stack" type="varchar(20)" />
+			<column name="customer_no" type="varchar(10)" />
+			<column name="tenant" type="varchar(36)" />
+			<column name="server" type="varchar(30)" />
+			<column name="version" type="INT8" />
+			<column name="created_at" type="timestamp" />
+			<column name="created_by" type="varchar(12)" />
+			<column name="changed_at" type="timestamp" />			
+		</createTable>
+
+		<createTable tableName="sample_advmnt">
+			<column name="id" type="INT8">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="title" type="varchar(255)" />
+			<column name="tenant" type="varchar(36)" />
+			<column name="version" type="INT8" />			
+			<column name="created_at" type="timestamp" />
+			<column name="changed_at" type="timestamp" />		
+		</createTable>
+
+		<createTable tableName="sequence_num">
+			<column name="seq_name" type="varchar(50)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="seq_count" type="numeric(35,0)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="Haifeng Yao" id="1.0.0.0002">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="0">select count(*) from sequence_num
+				where seq_name = 'ANALYSIS'
+			</sqlCheck>
+		</preConditions>
+		<comment>Initialize sequence table</comment>
+		<sql>
+			insert into sequence_num values ('ANALYSIS',1000001)
+		</sql>
+		<sql>
+			insert into sequence_num values ('ADVERTISEMENT',1000001)
+		</sql>
+	</changeSet>
+
+	<changeSet author="Haifeng Yao" id="1.0.0.0003">
+		<createTable tableName="sample_advmnt_test">
+			<column name="id" type="INT8">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="tenant" type="varchar(36)" />
+			<column name="created_at" type="timestamp" />
+			<column name="modified_at" type="timestamp" />
+			<column name="title" type="varchar(255)" />
+			<column name="version" type="INT8" />
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>

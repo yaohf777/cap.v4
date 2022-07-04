@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+	<edmx:DataServices>
+		<Schema Namespace="RC" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+			<EntityContainer Name="EntityContainer" p4:LazyLoadingEnabled="true" xmlns:p4="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="UserSystemRole" EntityType="RC.UserSystemRole"></EntitySet>
+				<EntitySet Name="ANALYSIS" EntityType="RC.ANALYSIS"></EntitySet>
+			</EntityContainer>
+			<EntityType Name="UserSystemRole">
+				<Key>
+					<PropertyRef Name="ROW_ID"/>
+				</Key>
+				<Property Name="ROW_ID" Type="Edm.String" MaxLength="32" Nullable="false"/>>
+				<Property Name="USER_ID" Type="Edm.String" MaxLength="50"/>
+                <Property Name="CONNECTOR" Type="Edm.String" MaxLength="20"/>
+                <Property Name="PRIVILEGE" Type="Edm.String" MaxLength="300"/>
+			</EntityType>
+			<EntityType Name="ANALYSIS">
+				<Key>
+					<PropertyRef Name="ID"/>
+				</Key>
+				<Property Name="ID" Type="Edm.String" Nullable="false"/>
+				<Property Name="NAME" Type="Edm.String" Nullable="false"/>
+				<Property Name="STATUS" Type="Edm.String" Nullable="false"/>
+				<Property Name="STATUS_DESC" Type="Edm.String"/>
+				<Property Name="TARGET_STACK" Type="Edm.String" Nullable="false"/>
+				<Property Name="TARGET_STACK_DESC" Type="Edm.String"/>
+				<Property Name="TARGET_PROD_VER" Type="Edm.String"/>
+				<Property Name="TARGET_PROD_VER_DESC" Type="Edm.String"/>
+				<Property Name="CUSTOMER_NO" Type="Edm.String"/>
+				<Property Name="CUSTOMER_NAME" Type="Edm.String"/>
+				<Property Name="COUNTRY_KEY" Type="Edm.String"/>
+				<Property Name="COUNTRY_NAME" Type="Edm.String"/>
+				<Property Name="CREATED_AT" Type="Edm.String" Nullable="false"/>
+				<Property Name="CREATED_BY" Type="Edm.String" Nullable="false"/>
+				<Property Name="CHANGED_AT" Type="Edm.String"/>
+				<Property Name="CHANGED_BY" Type="Edm.String"/>
+				<Property Name="SOURCE_PROD_VER" Type="Edm.String"/>
+				<Property Name="SOURCE_PROD_VER_DESC" Type="Edm.String"/>
+			    <Property Name="CUSTOM_CODE_SYS" Type="Edm.String"/>
+				<Property Name="ANALYZED_SYS" Type="Edm.String"/>
+			</EntityType>			
+		</Schema>	
+<!-- 		<Schema Namespace="RC" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+			<EntityContainer Name="EntityContainer" p4:LazyLoadingEnabled="true" xmlns:p4="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="ANALYSIS" EntityType="RC.ANALYSIS"></EntitySet>
+			</EntityContainer>
+			<EntityType Name="ANALYSIS">
+				<Key>
+					<PropertyRef Name="ID"/>
+				</Key>
+				<Property Name="ID" Type="Edm.String" Nullable="false"/>
+				<Property Name="NAME" Type="Edm.String" Nullable="false"/>
+				<Property Name="STATUS" Type="Edm.String" Nullable="false"/>
+				<Property Name="STATUS_DESC" Type="Edm.String"/>
+				<Property Name="TARGET_STACK" Type="Edm.String" Nullable="false"/>
+				<Property Name="TARGET_STACK_DESC" Type="Edm.String"/>
+				<Property Name="TARGET_PROD_VER" Type="Edm.String"/>
+				<Property Name="TARGET_PROD_VER_DESC" Type="Edm.String"/>
+				<Property Name="CUSTOMER_NO" Type="Edm.String"/>
+				<Property Name="CUSTOMER_NAME" Type="Edm.String"/>
+				<Property Name="COUNTRY_KEY" Type="Edm.String"/>
+				<Property Name="COUNTRY_NAME" Type="Edm.String"/>
+				<Property Name="CREATED_AT" Type="Edm.String" Nullable="false"/>
+				<Property Name="CREATED_BY" Type="Edm.String" Nullable="false"/>
+				<Property Name="CHANGED_AT" Type="Edm.String"/>
+				<Property Name="CHANGED_BY" Type="Edm.String"/>
+				<Property Name="SOURCE_PROD_VER" Type="Edm.String"/>
+				<Property Name="SOURCE_PROD_VER_DESC" Type="Edm.String"/>
+			    <Property Name="CUSTOM_CODE_SYS" Type="Edm.String"/>
+				<Property Name="ANALYZED_SYS" Type="Edm.String"/>
+			</EntityType>
+		</Schema> -->
+		<!--<Schema Namespace="RC" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+			<EntityType Name="Product">
+				<Key>
+					<PropertyRef Name="ProductID"/>
+				</Key>
+				<Property Name="ProductID" Type="Edm.String"/>
+				<Property Name="Name" Type="Edm.String"/>
+				<Property Name="Description" Type="Edm.String"/>
+				<Property Name="Category" Type="Edm.String"/>
+				<NavigationProperty Name="SalesOrderLineItems" Type="Collection(RC.SalesOrderLineItem)" Partner="Product"/>
+			</EntityType>
+			<EntityType Name="SalesOrder">
+				<Key>
+					<PropertyRef Name="SalesOrderID"/>
+				</Key>
+				<Property Name="SalesOrderID" Type="Edm.String"/>
+				<Property Name="Note" Type="Edm.String"/>
+				<Property Name="CustomerName" Type="Edm.String"/>
+				<Property Name="GrossAmount" Type="Edm.Int32"/>
+				<NavigationProperty Name="SalesOrderLineItems" Type="Collection(RC.SalesOrderLineItem)" Partner="SalesOrder"/>
+			</EntityType>
+			<EntityType Name="SalesOrderLineItem">
+				<Key>
+					<PropertyRef Name="SOLineItemID"/>
+				</Key>
+				<Property Name="SOLineItemID" Type="Edm.String"/>
+				<Property Name="SalesOrderID" Type="Edm.String"/>
+				<Property Name="ItemPosition" Type="Edm.Int32"/>
+				<Property Name="ProductID" Type="Edm.String"/>
+				<Property Name="Quantity" Type="Edm.Int32"/>
+				<Property Name="GrossAmount" Type="Edm.Int32"/>
+				<NavigationProperty Name="SalesOrder" Type="RC.SalesOrder" Nullable="false" Partner="SalesOrderLineItems"/>
+				<NavigationProperty Name="Product" Type="RC.Product" Nullable="false" Partner="SalesOrderLineItems"/>
+			</EntityType>
+			<EntityContainer Name="EntityContainer" p4:LazyLoadingEnabled="true" xmlns:p4="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="Products" EntityType="RC.Product">
+					<NavigationPropertyBinding Path="SalesOrderLineItems" Target="SalesOrderLineItems"/>
+				</EntitySet>
+				<EntitySet Name="SalesOrders" EntityType="RC.SalesOrder">
+					<NavigationPropertyBinding Path="SalesOrderLineItems" Target="SalesOrderLineItems"/>
+				</EntitySet>
+				<EntitySet Name="SalesOrderLineItems" EntityType="RC.SalesOrderLineItem">
+					<NavigationPropertyBinding Path="SalesOrder" Target="SalesOrders"/>
+					<NavigationPropertyBinding Path="Product" Target="Products"/>
+				</EntitySet>
+			</EntityContainer>
+		</Schema>-->
+	</edmx:DataServices>
+</edmx:Edmx>

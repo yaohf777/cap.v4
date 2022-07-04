@@ -1,0 +1,122 @@
+// 1. Not use automatic CDS artifacts generation since some data types (e.g. UTCTimestamp) are not recognized
+// 2. Only use names in UPPER CASE since JPA always convert the table to upper case (e.g. Analysis --> ANALYSIS)
+//    when preparing the SQL statement, however HANA is case sensitive.
+//    Also this helps to prevent issue in oData service CDSQuery which is case sensitive.
+// 3. Must use context which has identical name with Namespace property in RCService.xml
+context RC {
+    type PPMS_OBJ_NUM : String(20);
+    type PPMS_OBJ_DESC : String(60);
+
+    entity ANALYSIS {
+        key ID           : Integer not null;
+            NAME         : String(60);
+            STATUS       : String(1);
+            TARGET_STACK : PPMS_OBJ_NUM;
+            CUSTOMER_NO  : String(10);
+            TENANT       : String(36);
+            SERVER       : String(30);
+            VERSION      : Integer;
+            CREATED_AT   : UTCTimestamp;
+            CREATED_BY   : String(20);
+            CHANGED_AT   : UTCTimestamp;
+            CHANGED_BY   : String(20);
+    }
+
+    entity SYSTEM {
+        key ANALYSIS_ID  : Integer    not null;
+        key SYS_ID       : String(10) not null;
+        key PURPOSE      : String(12) not null;
+            SYS_CLIENT   : String(3);
+            INST_NO      : String(1);
+            SRC_PROD_VER : String(20);
+    }
+
+    entity PPMS_STACK {
+        key STACK_NUM    : PPMS_OBJ_NUM not null;
+            STACK_DESC   : PPMS_OBJ_DESC;
+            PROD_VER_NUM : PPMS_OBJ_NUM;
+    }
+
+    entity PPMS_PROD_VER {
+        key PROD_VER_NUM  : PPMS_OBJ_NUM not null;
+            PROD_VER_DESC : PPMS_OBJ_DESC;
+    }
+
+    view V_PPMS_STACK as
+        select from     PPMS_STACK as STACK
+        left outer join PPMS_PROD_VER as PROD_VER on
+            PROD_VER.PROD_VER_NUM = STACK.PROD_VER_NUM
+        {
+            STACK.STACK_NUM,
+            STACK.STACK_DESC,
+            STACK.PROD_VER_NUM,
+            PROD_VER.PROD_VER_DESC
+        };
+
+    entity CUSTOMER {
+        key CUSTOMER_NO   : String(10) not null;
+            CUSTOMER_NAME : String(35);
+            COUNTRY_KEY   : String(3);
+    }
+
+    entity COUNTRY {
+        key COUNTRY_KEY  : String(3) not null;
+            COUNTRY_NAME : String(50);
+    }
+
+    view V_CUSTOMER as
+        select from     CUSTOMER as CUSTOMER
+        left outer join COUNTRY as COUNTRY   on
+            COUNTRY.COUNTRY_KEY = CUSTOMER.COUNTRY_KEY
+        {
+            CUSTOMER.CUSTOMER_NO,
+            CUSTOMER.CUSTOMER_NAME,
+            CUSTOMER.COUNTRY_KEY,
+            COUNTRY.COUNTRY_NAME
+        };
+        
+    view V_ANALYSIS as
+        select from     ANALYSIS as ANALYSIS
+        left outer join SYSTEM as ANALYZED_SYS    on
+                ANALYZED_SYS.PURPOSE     = 'ANALYZED_SY'
+            and ANALYZED_SYS.ANALYSIS_ID = ANALYSIS.ID
+        left outer join SYSTEM as CUSTOM_CODE_SYS on
+                CUSTOM_CODE_SYS.PURPOSE     = 'CUST_CODE_SY'
+            and CUSTOM_CODE_SYS.ANALYSIS_ID = ANALYSIS.ID
+        left outer join V_PPMS_STACK as STACK     on
+                STACK.STACK_NUM = ANALYSIS.TARGET_STACK
+        left outer join V_CUSTOMER as CUSTOMER    on
+                CUSTOMER.CUSTOMER_NO = ANALYSIS.CUSTOMER_NO
+        {
+            ANALYSIS.ID,
+            ANALYSIS.NAME,
+            ANALYSIS.STATUS,
+            ANALYSIS.STATUS        as STATUS_DESC, //to be provided in UI
+            //S/4 target information
+            ANALYSIS.TARGET_STACK,
+            STACK.STACK_DESC       as TARGET_STACK_DESC,
+            STACK.PROD_VER_NUM     as TARGET_PROD_VER,
+            STACK.PROD_VER_DESC    as TARGET_PROD_VER_DESC,
+            //Customer information
+            ANALYSIS.CUSTOMER_NO,
+            CUSTOMER.CUSTOMER_NAME,
+            CUSTOMER.COUNTRY_KEY,
+            CUSTOMER.COUNTRY_NAME,
+            //Admin information
+            ANALYSIS.CREATED_AT,
+            ANALYSIS.CREATED_BY,
+            ANALYSIS.CHANGED_AT,
+            ANALYSIS.CHANGED_BY,
+            //Source system information
+            ANALYZED_SYS.SYS_ID   as SOURCE_PROD_VER,        //TODO
+            ANALYZED_SYS.SYS_ID   as SOURCE_PROD_VER_DESC,   //TODO
+            CUSTOM_CODE_SYS.SYS_ID as CUSTOM_CODE_SYS,
+            ANALYZED_SYS.SYS_ID    as ANALYZED_SYS
+        };
+
+    //Sequence
+    entity SEQUENCE_NUM {
+        key SEQ_NAME  : String(50) not null;
+            SEQ_COUNT : Integer;
+    }
+}
