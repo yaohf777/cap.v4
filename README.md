@@ -1,4 +1,4 @@
-CAP **oDataV4** PoC
+SAP CAP **oDataV4** PoC
 
 ## Application Programming Model
 The [BTP application programming model](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/00823f91779d4d42aa29a498e0535cdf.html) is followed.
